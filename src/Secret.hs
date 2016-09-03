@@ -1,6 +1,6 @@
 module Secret
     (
-        KeyPair
+        KeyPair(..)
       , getKeys
     ) where
 
