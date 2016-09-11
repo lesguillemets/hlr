@@ -47,6 +47,6 @@ parse = fromList . map parseLine . lines
     where
         parseLine :: String -> (String, String)
         parseLine s =
-            let (k,v') = span (== '=') s
+            let (k,v') = span (/= '=') s
                 v = init . drop 2 $ v'
                 in (k,v)
