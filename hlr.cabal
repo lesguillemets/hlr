@@ -16,6 +16,9 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Secret
+                     , Secret.Internal
+                     , Secret.Consumer
+                     , Secret.Token
                      , Lib
                      , Flickr
                      , Flickr.Auth

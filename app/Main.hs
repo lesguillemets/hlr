@@ -1,6 +1,6 @@
 module Main where
 
-import Secret
+import Secret.Consumer (getKeys)
 import Flickr.Auth
 import Flickr.Auth.Initial
 

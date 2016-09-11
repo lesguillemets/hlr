@@ -8,7 +8,7 @@ module Flickr.Auth.Common
 import qualified Data.ByteString.Char8 as BC
 import Web.Authenticate.OAuth
 
-import Secret (KeyPair(..))
+import Secret.Consumer (KeyPair(..))
 
 oauth :: KeyPair -> OAuth
 oauth (KeyPair key secret) =

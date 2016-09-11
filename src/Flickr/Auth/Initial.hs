@@ -15,7 +15,7 @@ import System.Directory
 import System.FilePath
 
 import Flickr.Auth.Common
-import Secret (KeyPair(..))
+import Secret.Consumer (KeyPair(..))
 
 authenticateInitial :: KeyPair -> IO Credential
 authenticateInitial k = do
