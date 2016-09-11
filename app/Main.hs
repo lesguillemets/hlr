@@ -9,4 +9,4 @@ main = do
     keys <- getKeys
     case keys of
          Nothing -> putStrLn "No consumer key/secret provided"
-         (Just k) -> authenticateInitial k >>= print
+         (Just k) -> initialise k >>= print
