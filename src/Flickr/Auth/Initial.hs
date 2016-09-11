@@ -1,14 +1,18 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Flickr.Auth.Initial
     (
-        authenticateInitial
+        initialise
     )
     where
 
 import qualified Data.ByteString.Char8 as BC
+import Data.Monoid ((<>))
+import Data.Map (fromList, (!))
 import Web.Authenticate.OAuth
 import Network.HTTP.Conduit
-import System.IO (hFlush, stdout)
+import System.IO (hFlush, stdout, appendFile)
+import System.Directory
+import System.FilePath
 
 import Flickr.Auth.Common
 import Secret (KeyPair(..))
@@ -24,3 +28,15 @@ authenticateInitial k = do
     getAccessToken oa (injectVerifier verifier tempCred) m
     where
         oa = oauth k
+
+initialise :: KeyPair -> IO Credential
+initialise k = do
+    accessToken <- authenticateInitial k
+    let
+        cds = fromList $ unCredential accessToken
+        tkn = cds ! "oauth_token"
+        tknscr = cds ! "oauth_token_secret"
+    store <- (</> ".hlr") <$> getHomeDirectory
+    BC.appendFile store . (\s -> "token=\"" <> s <> "\"\n") $ tkn
+    BC.appendFile store . (\s -> "tokenSecret=\"" <> s <> "\"") $ tknscr
+    return accessToken
