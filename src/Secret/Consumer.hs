@@ -4,9 +4,11 @@ module Secret.Consumer
       , getKeys
     ) where
 
+import Prelude hiding (lookup)
 import Control.Applicative ((<|>))
 import Control.Monad (liftM2)
 import Data.Maybe (fromMaybe)
+import Data.Map (Map(..), lookup)
 import System.Environment
 import System.Directory
 import System.FilePath
@@ -24,16 +26,13 @@ getKeys = do
     return $ en <|> fl
 
 readKeyfile :: FilePath -> IO (Maybe KeyPair)
-readKeyfile f = (>>= parseKeyfile) <$> readFileMaybe f
+readKeyfile f = (>>= parseKeyfile) <$> readFileKVMaybe f
 
-parseKeyfile :: String -> Maybe KeyPair
-parseKeyfile c =
-    case lines c of
-         (k:s:_) -> KeyPair <$> process k <*> process s
-         _ -> Nothing
+parseKeyfile :: Map String String -> Maybe KeyPair
+parseKeyfile m =
+    KeyPair <$> lookFor "key" <*> lookFor "secret"
     where
-        process = Just . unquote . dropWhile (/= '"')
-        unquote = filter (/= '"')
+        lookFor = (`lookup` m)
 -- sample:
 -- $ cat ~/.hlr
 -- key="01234ggggg"
